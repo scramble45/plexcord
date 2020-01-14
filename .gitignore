@@ -102,3 +102,6 @@ dist
 
 # TernJS port file
 .tern-port
+
+# Ignore plex db
+com.plexapp.plugins.library.db
