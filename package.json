@@ -1,0 +1,24 @@
+{
+  "name": "plexcord",
+  "version": "1.0.0",
+  "description": "a discord bot that queries a plex sqlite db",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/scramble45/plexcord.git"
+  },
+  "keywords": [
+    "plex",
+    "discord",
+    "bot"
+  ],
+  "author": "Rowan Hamilton",
+  "license": "UNLICENSED",
+  "bugs": {
+    "url": "https://github.com/scramble45/plexcord/issues"
+  },
+  "homepage": "https://github.com/scramble45/plexcord#readme"
+}
