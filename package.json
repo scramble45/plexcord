@@ -4,6 +4,8 @@
   "description": "a discord bot that queries a plex sqlite db",
   "main": "index.js",
   "scripts": {
+    "start": "node index.js",
+    "dev": "node-dev --no-deps --respawn index.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
@@ -22,9 +24,19 @@
   },
   "homepage": "https://github.com/scramble45/plexcord#readme",
   "dependencies": {
-    "debug": "^4.1.1",
+    "basic-auth": "^2.0.1",
+    "body-parser": "^1.19.0",
+    "cookie-parser": "^1.4.4",
     "discord.js": "^11.5.1",
+    "express": "^4.17.1",
+    "helmet": "^3.21.2",
     "lodash": "^4.17.15",
+    "moment": "^2.24.0",
+    "morgan": "^1.9.1",
     "sqlite3": "^4.1.1"
+  },
+  "devDependencies": {
+    "debug": "^4.1.1",
+    "node-dev": "^4.0.0"
   }
 }
