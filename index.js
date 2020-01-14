@@ -96,8 +96,9 @@ bot.on('message', message => {
       })
 
       _.forEach(filesToProcess, (f) => {
-        console.log('url encode:', encodeURIComponent(f.fileName))
-        message.author.send(`http://${config.external_hostname}:${config.web_port}/movies/${f.fileName}`)
+        let fileName = encodeURIComponent(f.fileName)
+        console.log('url encode:', fileName)
+        message.author.send(`http://${config.external_hostname}:${config.web_port}/movies/${fileName}`)
       })
       
     })
