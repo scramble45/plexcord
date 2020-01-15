@@ -86,19 +86,26 @@ bot.on('message', message => {
       debug(results)
       
       let filesArray = _.get(results, 'file.0', [])
+      let title = _.get(results, 'title', 'Download')
 
       let filesToProcess = _.map([filesArray], (f) => {
         return {
           fileName: f.filename,
-          size: f.duration,
+          size: f.size,
           hash: f.hash
         }
       })
 
       _.forEach(filesToProcess, (f) => {
-        let fileName = encodeURIComponent(f.fileName)
-        console.log('url encode:', fileName)
-        message.author.send(`http://${config.external_hostname}:${config.web_port}/movies/${fileName}`)
+        console.log('fileName', f.fileName)
+        message.author.send({
+            "embed":{
+              "title": title,
+              "url": encodeURI(`http://${config.external_hostname}:${config.web_port}/movies/${f.fileName}`),
+              "description": `Size: ${f.size}\nFile Hash: ${f.hash}`
+            }
+          }
+        )
       })
       
     })
@@ -138,8 +145,10 @@ app.use(helmet.hsts({
   preload: true
 }))
 
+app.set('view engine', 'raw')
 // static routes
 app.use('/movies', express.static(path.join(config.movie_dir)))
+
 
 // morgan
 app.use(logger('dev'))
