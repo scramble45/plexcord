@@ -1,5 +1,5 @@
 # PlexCord
-a discord bot that can query a plex db
+a multi-chat-client bot that connects to a plex database and serves up raw media
 
 ## Configuration
 
