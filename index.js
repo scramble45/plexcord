@@ -109,7 +109,7 @@ bot.on('message', message => {
 
         let encodedFilename = encodeURI(path.normalize(f.fileName))
         message.author.send(`http://${config.external_hostname}:${config.web_port}/files/${f.id}/${f.fileName}`)
-        message.author.send(`curl -o "${f.fileName}" --url http://${config.external_hostname}:${config.web_port}/files/${f.id}/${encodedFilename}`, { code: 'text', split: true })
+        message.author.send(`curl -o "${f.fileName}" --url http://${config.external_hostname}:${config.web_port}/files/${f.id}/${encodedFilename} -H "Authorization: Basic b64"`, { code: 'text', split: true })
       })
     })
   }
