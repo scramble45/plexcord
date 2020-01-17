@@ -8,7 +8,6 @@ const discord      = require('discord.js')
 const express      = require('express')
 const helmet       = require("helmet")
 const logger       = require('morgan')
-const moment       = require('moment')
 const path         = require('path')
 
 // movie
@@ -38,7 +37,6 @@ if (!process.env.plexLibrary) {
 
 const bot = new discord.Client()
 bot.login(process.env.discord_token) // login
-
 
 // bot ready
 bot.on('ready', () => {
@@ -97,23 +95,24 @@ bot.on('message', message => {
       })
 
       _.forEach(filesToProcess, (f) => {
-        console.log('fileName', f.fileName)
+        debug('fileName requested:', f.fileName)
+        
         message.author.send({
             "embed":{
               "title": title,
-              "url": encodeURI(`http://${config.external_hostname}:${config.web_port}/movies/${f.fileName}`),
               "description": `Size: ${f.size}\nFile Hash: ${f.hash}`
             }
           }
         )
-      })
-      
-    })
 
+        let encodedFilename = encodeURI(path.normalize(f.fileName))
+        message.author.send(`http://${config.external_hostname}:${config.web_port}/files/${f.fileName}`, { code: 'text', split: true })
+        message.author.send(`curl -o "${f.fileName}" --url http://${config.external_hostname}:${config.web_port}/files/${encodedFilename}`, { code: 'text', split: true })
+      })
+    })
   }
 
 })
-
 
 // cmds
 var helpDialog = 'Help Commands\n'
@@ -122,7 +121,7 @@ var helpDialog = 'Help Commands\n'
   helpDialog += `   \nThis is a private server function...\n`
   helpDialog += '   ~!list          List all movies by id\n'
   // helpDialog += '   ~!description   Description of file by id\n'
-  helpDialog += '   ~!request 0000  Request a file by id\n\n```'
+  helpDialog += '   ~!request 00000 Request a file by id\n\n```'
 
 // express
 var app = express()
@@ -144,11 +143,6 @@ app.use(helmet.hsts({
   maxAge: 10886400000, // Must be at least 18 weeks to be approved by Google
   preload: true
 }))
-
-app.set('view engine', 'raw')
-// static routes
-app.use('/movies', express.static(path.join(config.movie_dir)))
-
 
 // morgan
 app.use(logger('dev'))
@@ -173,6 +167,9 @@ app.get('/', function (req, res) {
   })
 })
 
+// static files
+app.use('/files', express.static(path.join(config.movie_dir)))
+
 // share config
 app.use(function(req, res, next) {
   res.locals.config = config
@@ -189,19 +186,15 @@ app.use(function(req, res, next) {
 // development error handler will print stacktrace
 if (app.get('env') === 'development') {
   app.use(function(err, req, res, next) {
-    res.status(err.status || 500)
-    res.render('error', {
-      message: err.message,
-      error: err
+    res.status(err.status || 500).json({
+      message: `${err.message}`,
     })
   })
 }
 
 // production error handler no stacktraces leaked to user
 app.use(function(err, req, res, next) {
-  res.status(err.status || 500)
-  res.render('error', {
-    message: err.message,
-    error: {}
+  res.status(err.status || 500).json({
+    message: `${err.message}`,
   })
 })
