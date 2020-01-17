@@ -145,15 +145,76 @@ bot.on('message', message => {
     })
   }
 
+
+  if (cmd === 'description') {
+    let [id] = args
+    if (!id) message.channel.send('You must provide an id.')
+    libraryFileInfo(id, (err, results) => {
+      if (err) return err
+      if (!results) return message.channel.send(`Nothing found by that id: ${id}`)
+      debug(results)
+      
+      let filesArray = _.get(results, 'file.0', [])
+      let title = _.get(results, 'title', 'Download')
+
+      let filesToProcess = _.map([filesArray], (f) => {
+        return {
+          id: f.id,
+          dirPath: path.dirname(f.file),
+          fileName: f.filename,
+          size: f.size,
+          hash: f.hash
+        }
+      })
+
+      _.forEach(filesToProcess, (f) => {
+        debug('fileName requested:', f.dirPath, f.fileName)
+        
+        let fileName = _.get(f, 'fileName')
+        let fileId   = _.get(f, 'id')
+        if (!fileName || !fileId) {
+          debug('Filename or id did not return')
+          return
+        }
+
+        message.author.send({
+            "embed":{
+              title: title,
+              color: 15105570,
+              fields: [{
+                  name: "Year:",
+                  value: _.get(results, 'year', 'N/A')
+                },
+                {
+                  name: "Summary:",
+                  value: _.get(results, 'summary', 'N/A')
+                },
+                {
+                  name: "Size:",
+                  value: _.get(f, 'size', 'N/A')
+                },
+                {
+                  name: "Hash:",
+                  value: "`" + _.get(f, 'hash', 'N/A') + "`"
+                }
+              ],
+              timestamp: new Date()
+            }
+          }
+        )
+      })
+    })
+  }
+
 })
 
 // cmds
 var helpDialog = 'Help Commands\n'
   helpDialog += '```\nPlexCord:\n'
   helpDialog += `   \nAll file transactions are logged...\n`
-  helpDialog += '   ~!list          List all files by id\n'
-  // helpDialog += '   ~!description   Description of file by id\n'
-  helpDialog += '   ~!request 00000 Request a file by id\n\n```'
+  helpDialog += '   ~!list                List all files by id\n'
+  helpDialog += '   ~!description 00000   Description of file by id\n'
+  helpDialog += '   ~!request 00000       Request a file by id\n\n```'
 
 // express
 var app = express()
