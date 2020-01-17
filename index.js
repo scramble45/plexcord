@@ -11,8 +11,9 @@ const morgan       = require('morgan')
 const path         = require('path')
 
 // files
-const libraryList  = require('./lib/queries').libraryList
+const libraryList     = require('./lib/queries').libraryList
 const libraryFileInfo = require('./lib/queries').libraryFileInfo
+const fileQuery       = require('./lib/queries').fileQuery
 
 // discord
 if (!process.env.discord_token){ 
@@ -164,29 +165,10 @@ app.listen(port, () => debug(`PlexCord webserver listening on port: ${port}`))
 
 // files by: id + filename
 app.get('/files/:id/:filename', function (req, res, next) {
-  var db = config.init_db()
-
-  db.get("SELECT file FROM media_parts WHERE id = ?", req.params.id, function(err, row) {
-    console.log('testing err:', req.params.id)
-    var options = {
-      dotfiles: 'deny',
-      headers: {
-        'x-timestamp': Date.now(),
-        'x-sent': true
-      }
-    };
-    var fileName = row.file
-    res.sendFile(fileName , options, function (err) {
-      if (err) {
-        console.error(err)
-        res.status(err.status).end()
-      }
-      else {
-        debug('Sent file:', fileName)
-      }
-    })
+  fileQuery(req, res, (err, results) => {
+    if (err) debug(err)
+    debug(results)
   })
-  db.close()
 })
 
 app.get('/', function (req, res) {
