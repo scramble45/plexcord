@@ -7,7 +7,7 @@ a discord bot that can query a plex db
 
 - `discord_token=""`
 - `auth_password="password"`
-- `plexLibrary="./com.plexapp.plugins.library.db"`
+- `database="./com.plexapp.plugins.library.db"`
 - `external_hostname="somehostname.com"`
 
 ## Startup:
