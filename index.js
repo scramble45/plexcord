@@ -88,7 +88,7 @@ bot.on('message', message => {
 
       let filesToProcess = _.map([filesArray], (f) => {
         return {
-          id: id,
+          id: f.id,
           dirPath: path.dirname(f.file),
           fileName: f.filename,
           size: f.size,
@@ -108,8 +108,8 @@ bot.on('message', message => {
         )
 
         let encodedFilename = encodeURI(path.normalize(f.fileName))
-        message.author.send(`http://${config.external_hostname}:${config.web_port}/files/${id}/${f.fileName}`)
-        message.author.send(`curl -o "${f.fileName}" --url http://${config.external_hostname}:${config.web_port}/files/${id}/${encodedFilename}`, { code: 'text', split: true })
+        message.author.send(`http://${config.external_hostname}:${config.web_port}/files/${f.id}/${f.fileName}`)
+        message.author.send(`curl -o "${f.fileName}" --url http://${config.external_hostname}:${config.web_port}/files/${f.id}/${encodedFilename}`, { code: 'text', split: true })
       })
     })
   }
@@ -167,6 +167,7 @@ app.get('/files/:id/:filename', function (req, res, next) {
   var db = config.init_db()
 
   db.get("SELECT file FROM media_parts WHERE id = ?", req.params.id, function(err, row) {
+    console.log('testing err:', req.params.id)
     var options = {
       dotfiles: 'deny',
       headers: {
