@@ -1,4 +1,4 @@
-
+const debug     = require('debug')('plexCord')
 const express   = require('express')
 const fileQuery = require('../lib/queries').fileQuery
 const router    = express.Router()

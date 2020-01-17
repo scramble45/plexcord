@@ -99,17 +99,48 @@ bot.on('message', message => {
       _.forEach(filesToProcess, (f) => {
         debug('fileName requested:', f.dirPath, f.fileName)
         
+        let fileName = _.get(f, 'fileName')
+        let fileId   = _.get(f, 'id')
+        if (!fileName || !fileId) {
+          debug('Filename or id did not return')
+          return
+        }
+
+        let encodedFilename = encodeURI(path.normalize(fileName))
+        let curlCmd = "`" + `curl -o "${fileName}" --url http://${config.external_hostname}:${config.web_port}/files/${fileId}/${encodedFilename} -H "Authorization: Basic b64"` + "`"
         message.author.send({
             "embed":{
-              "title": title,
-              "description": `Size: ${f.size}\nFile Hash: ${f.hash}`
+              title: title,
+              color: 15105570,
+              fields: [{
+                  name: "Year:",
+                  value: _.get(results, 'year', 'N/A')
+                },
+                {
+                  name: "Summary:",
+                  value: _.get(results, 'summary', 'N/A')
+                },
+                {
+                  name: "Size:",
+                  value: _.get(f, 'size', 'N/A')
+                },
+                {
+                  name: "Hash:",
+                  value: "`" + _.get(f, 'hash', 'N/A') + "`"
+                },
+                {
+                  name: "Link:",
+                  value: `[Download](http://${config.external_hostname}:${config.web_port}/files/${fileId}/${fileName})`
+                },
+                {
+                  name: "Curl:",
+                  value: curlCmd
+                }
+              ],
+              timestamp: new Date()
             }
           }
         )
-
-        let encodedFilename = encodeURI(path.normalize(f.fileName))
-        message.author.send(`http://${config.external_hostname}:${config.web_port}/files/${f.id}/${f.fileName}`)
-        message.author.send(`curl -o "${f.fileName}" --url http://${config.external_hostname}:${config.web_port}/files/${f.id}/${encodedFilename} -H "Authorization: Basic b64"`, { code: 'text', split: true })
       })
     })
   }
