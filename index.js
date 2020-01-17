@@ -32,7 +32,7 @@ if (!process.env.auth_password){
 
 if (!process.env.plexLibrary) {
   console.error('You need to set your plex database path in config.js')
-  process.exit
+  process.exit(1)
 }
 
 const bot = new discord.Client()
