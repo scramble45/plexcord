@@ -11,17 +11,7 @@ let helpDialog = 'Help Commands\n'
 
 
 function list(cb){
-  return libraryList(null, (err, results) => {
-    if (err) return cb(err)
-    let list = ""
-    _.each(results, (i) => {
-      list += `ID: ${i.id} - ${i.title} (${i.year})\n`
-    })
-
-    console.debug(list)
-
-    return cb(null, list)
-  })
+  return libraryList(null, cb)
 }
 
 module.exports = {

@@ -1,4 +1,4 @@
-
+const _ = require("lodash")
 const chatBot      = require('./chat-bot')
 
 module.exports = (http) => {
@@ -21,12 +21,17 @@ module.exports = (http) => {
 
       switch (message) {
         case "~!help":
-          io.emit('chat_message', '<strong>BOT</strong>: ' + chatBot.helpDialog)
+          io.emit('chat_message', '<strong>BOT</strong>:' + chatBot.helpDialog)
           break
         case "~!list":
           chatBot.list((err, list) => {
             if (err) return console.error(err)
-            io.emit('chat_message', '<strong>BOT</strong>' + list)
+            let mappedList = _.map(list, (item) => {
+              let year = ''
+              if (item.year) year = `(${item.year})`
+              return `${item.id} - ${item.title} ${year}`
+            })
+            io.emit('chat_message', '<strong>BOT</strong><br>' + mappedList.join("<br>"))
           })
       }
     })
