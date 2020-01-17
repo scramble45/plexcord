@@ -89,7 +89,6 @@ bot.on('message', message => {
       let matches = []
 
       _.forEach(term, (t) => {
-       
         let searchTerm = new RegExp(t, 'i')
         debug('running search for:', searchTerm)
 
@@ -99,9 +98,11 @@ bot.on('message', message => {
             matches.push(results[i])
           }
         }
-        
       })
       
+      // dedupe
+      matches = _.uniqBy(matches, 'title')
+
       if (!matches.length > 0) {
         message.channel.send('No search results found.')
         return
