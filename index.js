@@ -145,7 +145,6 @@ bot.on('message', message => {
     })
   }
 
-
   if (cmd === 'description') {
     let [id] = args
     if (!id) message.channel.send('You must provide an id.')
