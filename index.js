@@ -75,6 +75,50 @@ bot.on('message', message => {
    
   }
 
+  if (cmd === 'search'){
+    if (!args) message.channel.send('You must provide a search term.')
+    if (!_.isArray(args)) args = [args]
+    let term = args
+
+    
+    libraryList(null, (err, results) => {
+      if (err) return err
+
+      debug('search term:', term)
+
+      let matches = []
+
+      _.forEach(term, (t) => {
+       
+        let searchTerm = new RegExp(t, 'i')
+        debug('running search for:', searchTerm)
+
+
+        for (var i=0; i < results.length; i++) {
+          if (results[i].title.match(searchTerm)) {
+            matches.push(results[i])
+          }
+        }
+        
+      })
+      
+      if (!matches.length > 0) {
+        message.channel.send('No search results found.')
+        return
+      }
+
+      let list = ""
+      _.forEach(matches, (i) => {
+        list += `ID: ${i.id} - ${i.title} (${i.year})\n`
+      })
+
+      debug(list)
+
+      message.channel.send(list, { code: 'text', split: true })      
+    })
+   
+  }
+
   if (cmd === 'request') {
     let [id] = args
     if (!id) message.channel.send('You must provide an id.')
@@ -212,6 +256,7 @@ var helpDialog = 'Help Commands\n'
   helpDialog += '```\nPlexCord:\n'
   helpDialog += `   \nAll file transactions are logged...\n`
   helpDialog += '   ~!list                List all files by id\n'
+  helpDialog += '   ~!search name here    Search by title name\n'
   helpDialog += '   ~!description 00000   Description of file by id\n'
   helpDialog += '   ~!request 00000       Request a file by id\n\n```'
 
