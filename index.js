@@ -13,7 +13,6 @@ const path         = require('path')
 // files
 const libraryList     = require('./lib/queries').libraryList
 const libraryFileInfo = require('./lib/queries').libraryFileInfo
-const fileQuery       = require('./lib/queries').fileQuery
 
 // discord
 if (!process.env.discord_token){ 
@@ -164,12 +163,7 @@ app.use(apiAuth)
 app.listen(port, () => debug(`PlexCord webserver listening on port: ${port}`))
 
 // files by: id + filename
-app.get('/files/:id/:filename', function (req, res, next) {
-  fileQuery(req, res, (err, results) => {
-    if (err) debug(err)
-    debug(results)
-  })
-})
+app.use('/files', require('./routes/files'))
 
 app.get('/', function (req, res) {
   res.status(200).json({
