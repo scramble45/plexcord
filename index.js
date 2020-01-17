@@ -7,12 +7,12 @@ const debug        = require('debug')('plexCord')
 const discord      = require('discord.js')
 const express      = require('express')
 const helmet       = require("helmet")
-const logger       = require('morgan')
+const morgan       = require('morgan')
 const path         = require('path')
 
-// movie
-const movieList = require('./lib/queries').movieList
-const movieFileInfo = require('./lib/queries').movieFileInfo
+// files
+const libraryList  = require('./lib/queries').libraryList
+const libraryFileInfo = require('./lib/queries').libraryFileInfo
 
 // discord
 if (!process.env.discord_token){ 
@@ -40,7 +40,7 @@ bot.login(process.env.discord_token) // login
 
 // bot ready
 bot.on('ready', () => {
-  console.log(`PlexCord BOT is connected! - ${bot.user.tag}`)
+  debug(`PlexCord BOT is connected! - ${bot.user.tag}`)
 })
 
 bot.on('message', message => {
@@ -61,7 +61,7 @@ bot.on('message', message => {
   }
 
   if (message.content === '~!list'){
-    movieList(null, (err, results) => {
+    libraryList(null, (err, results) => {
       if (err) return err
       let list = ""
       _.forEach(results, (i) => {
@@ -78,7 +78,7 @@ bot.on('message', message => {
   if (cmd === 'request') {
     let [id] = args
     if (!id) message.channel.send('You must provide an id.')
-    movieFileInfo(id, (err, results) => {
+    libraryFileInfo(id, (err, results) => {
       if (err) return err
       if (!results) return message.channel.send(`Nothing found by that id: ${id}`)
       debug(results)
@@ -88,6 +88,8 @@ bot.on('message', message => {
 
       let filesToProcess = _.map([filesArray], (f) => {
         return {
+          id: id,
+          dirPath: path.dirname(f.file),
           fileName: f.filename,
           size: f.size,
           hash: f.hash
@@ -95,7 +97,7 @@ bot.on('message', message => {
       })
 
       _.forEach(filesToProcess, (f) => {
-        debug('fileName requested:', f.fileName)
+        debug('fileName requested:', f.dirPath, f.fileName)
         
         message.author.send({
             "embed":{
@@ -106,8 +108,8 @@ bot.on('message', message => {
         )
 
         let encodedFilename = encodeURI(path.normalize(f.fileName))
-        message.author.send(`http://${config.external_hostname}:${config.web_port}/files/${f.fileName}`, { code: 'text', split: true })
-        message.author.send(`curl -o "${f.fileName}" --url http://${config.external_hostname}:${config.web_port}/files/${encodedFilename}`, { code: 'text', split: true })
+        message.author.send(`http://${config.external_hostname}:${config.web_port}/files/${id}/${f.fileName}`)
+        message.author.send(`curl -o "${f.fileName}" --url http://${config.external_hostname}:${config.web_port}/files/${id}/${encodedFilename}`, { code: 'text', split: true })
       })
     })
   }
@@ -117,9 +119,8 @@ bot.on('message', message => {
 // cmds
 var helpDialog = 'Help Commands\n'
   helpDialog += '```\nPlexCord:\n'
-  helpDialog += `   \nDont ask for server password all file transactions are logged by ip\n`
-  helpDialog += `   \nThis is a private server function...\n`
-  helpDialog += '   ~!list          List all movies by id\n'
+  helpDialog += `   \nAll file transactions are logged...\n`
+  helpDialog += '   ~!list          List all files by id\n'
   // helpDialog += '   ~!description   Description of file by id\n'
   helpDialog += '   ~!request 00000 Request a file by id\n\n```'
 
@@ -145,7 +146,8 @@ app.use(helmet.hsts({
 }))
 
 // morgan
-app.use(logger('dev'))
+app.enable("trust proxy")
+app.use(morgan('short'))
 
 // body parser
 app.use(bodyParser.json())
@@ -158,17 +160,39 @@ app.use(cookieParser())
 app.use(apiAuth)
 
 // listen
-app.listen(port, () => console.log(`plexCord webserver listening on port: ${port}`))
-// app.get('/', (req, res) => res.send('Listening and awaiting your commands...'))
+app.listen(port, () => debug(`PlexCord webserver listening on port: ${port}`))
+
+// files by: id + filename
+app.get('/files/:id/:filename', function (req, res, next) {
+  var db = config.init_db()
+
+  db.get("SELECT file FROM media_parts WHERE id = ?", req.params.id, function(err, row) {
+    var options = {
+      dotfiles: 'deny',
+      headers: {
+        'x-timestamp': Date.now(),
+        'x-sent': true
+      }
+    };
+    var fileName = row.file
+    res.sendFile(fileName , options, function (err) {
+      if (err) {
+        console.error(err)
+        res.status(err.status).end()
+      }
+      else {
+        debug('Sent file:', fileName)
+      }
+    })
+  })
+  db.close()
+})
 
 app.get('/', function (req, res) {
   res.status(200).json({
     message: 'Listening and awaiting your commands...'
   })
 })
-
-// static files
-app.use('/files', express.static(path.join(config.movie_dir)))
 
 // share config
 app.use(function(req, res, next) {
