@@ -10,12 +10,11 @@ const helmet       = require("helmet")
 const morgan       = require('morgan')
 
 const discord      = require('./services/discord')
-const chatBot      = require('./services/chat-bot')
 
 // express
 let app = express()
 const http = require('http').Server(app)
-const io = require('socket.io')(http)
+const io = require("./services/web-sockets")(http)
 
 console.info("starting with config\n", config)
 
@@ -76,31 +75,11 @@ app.use(apiAuth)
 // files by: id + filename
 app.use('/files', require('./routes/files'))
 
+app.use('/chat', require('./routes/chat'))
+
 app.get('/', function (req, res) {
   res.status(200).json({
     message: 'Listening and awaiting your commands...'
-  })
-})
-
-app.get('/chat', (req, res) => {
-  res.render('index.ejs')
-
-  io.sockets.on('connection', function(socket) {
-    socket.on('username', function(username) {
-      socket.username = username
-      io.emit('is_online', '🔵 <i>' + socket.username + ' join the chat..</i>')
-    })
-
-    socket.on('disconnect', function(username) {
-      io.emit('is_online', '🔴 <i>' + socket.username + ' left the chat..</i>')
-    })
-
-    socket.on('chat_message', function(message) {
-      io.emit('chat_message', '<strong>' + socket.username + '</strong>: ' + message)
-      if (message.indexOf("~!help") !== -1) {
-        io.emit('chat_message', '<strong>BOT</strong>: ' + chatBot.helpDialog)
-      }
-    })
   })
 })
 
@@ -135,4 +114,4 @@ app.use(function(err, req, res, next) {
 
 const server = http.listen(config.web_port, function() {
   console.log('listening on *:', config.web_port);
-});
+})

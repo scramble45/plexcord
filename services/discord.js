@@ -5,17 +5,10 @@ const path         = require('path')
 const libraryList     = require('../lib/queries').libraryList
 const libraryFileInfo = require('../lib/queries').libraryFileInfo
 
+const chatBot = require('./chat-bot')
+
 
 const bot = new discord.Client()
-
-// cmds
-var helpDialog = 'Help Commands\n'
-  helpDialog += '```\nPlexCord:\n'
-  helpDialog += `   \nAll file transactions are logged...\n`
-  helpDialog += '   ~!list                List all files by id\n'
-  helpDialog += '   ~!search name here    Search by title name\n'
-  helpDialog += '   ~!description 00000   Description of file by id\n'
-  helpDialog += '   ~!request 00000       Request a file by id\n\n```'
 
 
 module.exports = (token) => {
@@ -41,7 +34,7 @@ module.exports = (token) => {
     debug('Command Passed:', cmd, args)
 
     if (message.content === '~!help'){
-      message.channel.send(helpDialog)
+      message.channel.send(chatBot.helpDialog)
     }
 
     if (message.content === '~!list'){
