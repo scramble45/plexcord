@@ -1,7 +1,10 @@
-# PlexCord
-a multi-chat-client bot that connects to a plex database and serves up raw media
+<p align="center">
+  <img src="https://i.postimg.cc/76Ds5qGG/plexcord-logo-sm.png" alt="PlexCord"/>
+</p>
 
-## Configuration
+<p align="center">🍿 a multi-chat-client bot that connects to a plex database and serves up raw media 🍿</p>
+
+# Configuration
 
 ## Environmentals:
 
