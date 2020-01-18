@@ -203,6 +203,7 @@ bot.on('message', message => {
       let title = _.get(results, 'title', 'Download')
 
       let filesToProcess = _.map([filesArray], (f) => {
+        console.log('testing f:', f)
         return {
           id: f.id,
           dirPath: path.dirname(f.file),
@@ -212,13 +213,15 @@ bot.on('message', message => {
         }
       })
 
-      _.forEach(filesToProcess, (f) => {
-        debug('fileName requested:', f.dirPath, f.fileName)
+      _.forEach(filesToProcess, (file) => {
+        console.log('FILE TEST:', JSON.stringify(file, null, 2))
+        debug('fileName requested:', file.dirPath, file.fileName)
         
-        let fileName = _.get(f, 'fileName')
-        let fileId   = _.get(f, 'id')
+        let fileName = _.get(file, 'fileName')
+        let fileId   = _.get(file, 'id')
         if (!fileName || !fileId) {
           debug('Filename or id did not return')
+          message.author.send('There was a problem with the requested file id')
           return
         }
 
@@ -228,19 +231,19 @@ bot.on('message', message => {
               color: 15105570,
               fields: [{
                   name: "Year:",
-                  value: _.get(results, 'year', 'N/A')
+                  value: _.get(results, 'year', 'N/A') || 'N/A'
                 },
                 {
                   name: "Summary:",
-                  value: _.get(results, 'summary', 'N/A')
+                  value: _.get(results, 'summary', 'N/A') || 'N/A'
                 },
                 {
                   name: "Size:",
-                  value: _.get(f, 'size', 'N/A')
+                  value: _.get(file, 'size', 'N/A') || 'N/A'
                 },
                 {
                   name: "Hash:",
-                  value: "`" + _.get(f, 'hash', 'N/A') + "`"
+                  value: "`" + (_.get(file, 'hash', 'N/A') || 'N/A') + "`"
                 }
               ],
               timestamp: new Date()
