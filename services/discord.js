@@ -1,5 +1,4 @@
 const discord      = require('discord.js')
-const path         = require('path')
 const _            = require('lodash')
 const debug        = require('debug')('plexCord')
 
