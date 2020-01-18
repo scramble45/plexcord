@@ -153,25 +153,26 @@ bot.on('message', message => {
 
         let encodedFilename = encodeURI(path.normalize(fileName))
         let curlCmd = "`" + `curl -o "${fileName}" --url http://${config.external_hostname}:${config.web_port}/files/${fileId}/${encodedFilename} -H "Authorization: Basic b64"` + "`"
+
         message.author.send({
-            "embed":{
+            embed: {
               title: title,
               color: 15105570,
               fields: [{
                   name: "Year:",
-                  value: _.get(results, 'year', 'N/A')
+                  value: _.get(results, 'year', 'N/A') || 'N/A'
                 },
                 {
                   name: "Summary:",
-                  value: _.get(results, 'summary', 'N/A')
+                  value: _.get(results, 'summary', 'N/A') || 'N/A'
                 },
                 {
                   name: "Size:",
-                  value: _.get(f, 'size', 'N/A')
+                  value: _.get(f, 'size', 'N/A') || 'N/A'
                 },
                 {
                   name: "Hash:",
-                  value: "`" + _.get(f, 'hash', 'N/A') + "`"
+                  value: "`" + (_.get(f, 'hash', 'N/A') || 'N/A') + "`"
                 },
                 {
                   name: "Link:",
