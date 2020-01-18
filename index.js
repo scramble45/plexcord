@@ -67,7 +67,7 @@ app.use(cookieParser())
 app.use(apiAuth)
 
 // listen
-app.listen(port, () => debug(`PlexCord webserver listening on port: ${port}`))
+let server = app.listen(port, () => console.log(`PlexCord webserver listening on port: ${port}`))
 
 // files by: id + filename
 app.use('/files', require('./routes/files'))
@@ -105,4 +105,14 @@ app.use(function(err, req, res, next) {
   res.status(err.status || 500).json({
     message: `${err.message}`,
   })
+})
+
+process.on('SIGINT', function onSigterm () {
+  if(server) {
+    console.log("shutting express down")
+    return server.close(() => {
+      console.log('Closed out remaining connections')
+      process.exit(0)
+    })
+  }
 })
