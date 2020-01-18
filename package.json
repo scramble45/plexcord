@@ -1,7 +1,7 @@
 {
   "name": "plexcord",
   "version": "1.0.0",
-  "description": "a discord bot that queries a plex sqlite db",
+  "description": "a multi-chat-client bot that talks to a plex db",
   "main": "index.js",
   "scripts": {
     "start": "node index.js",
