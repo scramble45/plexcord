@@ -12,17 +12,17 @@ const morgan       = require('morgan')
 // services
 const bot          = discord(config.discord_token)
 
-if (!process.env.external_hostname){
+if (!config.external_hostname){
   console.error('You will want to specify you external hostname/domain name in config.js')
   process.exit(1)
 }
 
-if (!process.env.auth_password){
+if (!config.auth_password){
   console.error('You need to specify a basic auth password in your config.js')
   process.exit(1)
 }
 
-if (!process.env.plexLibrary) {
+if (!config.database) {
   console.error('You need to set your plex database path in config.js')
   process.exit(1)
 }
