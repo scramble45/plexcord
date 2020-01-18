@@ -10,7 +10,7 @@ if (!config.discord_token){
   process.exit(1)
 }
 
-const cmdPrefix = process.env.discord_cmdPrefix || '~!'
+const cmdPrefix = config.discord_cmdPrefix || '~!'
 
 // files
 const libraryList     = require('../lib/queries').libraryList
