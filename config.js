@@ -1,5 +1,6 @@
 module.exports = {
   discord_token: process.env.discord_token,
+  discord_cmdPrefix: process.env.discord_cmdPrefix,
   auth_password: process.env.auth_password,
   database: process.env.plexLibrary,
   external_hostname: process.env.external_hostname,

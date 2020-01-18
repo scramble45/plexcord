@@ -4,6 +4,14 @@ const _            = require('lodash')
 const config       = require('../config')
 const debug        = require('debug')('plexCord')
 
+// discord
+if (!config.discord_token){
+  console.error('Missing discord bot token in config.js file')
+  process.exit(1)
+}
+
+const cmdPrefix = config.discord_cmdPrefix || '~!'
+
 // files
 const libraryList     = require('../lib/queries').libraryList
 const libraryFileInfo = require('../lib/queries').libraryFileInfo
@@ -12,10 +20,11 @@ const libraryFileInfo = require('../lib/queries').libraryFileInfo
 var helpDialog = 'Help Commands\n'
   helpDialog += '```\nPlexCord:\n'
   helpDialog += `   \nAll file transactions are logged...\n`
-  helpDialog += '   ~!list                List all files by id\n'
-  helpDialog += '   ~!search name here    Search by title name\n'
-  helpDialog += '   ~!description 00000   Description of file by id\n'
-  helpDialog += '   ~!request 00000       Request a file by id\n\n```'
+  helpDialog += `   \nCommand prefix: ${cmdPrefix}\n`
+  helpDialog += '   list                List all files by id\n'
+  helpDialog += '   search name here    Search by title name\n'
+  helpDialog += '   description 00000   Description of file by id\n'
+  helpDialog += '   request 00000       Request a file by id\n\n```'
 
 const bot = new discord.Client()
 module.exports = (token) => {
@@ -30,20 +39,19 @@ module.exports = (token) => {
     // So the bot doesn't reply to iteself
     if (message.author.bot) return
 
-    // Check if the message starts with the `~!` trigger
-    let prefix = '~!'
-    if (!message.content.startsWith(prefix)) return;
+    // Check if the message starts with the prefix trigger
+    if (!message.content.startsWith(cmdPrefix)) return;
 
     // parse arguments
-    let args = message.content.slice(prefix.length).trim().split(/ +/g)
+    let args = message.content.slice(cmdPrefix.length).trim().split(/ +/g)
     let cmd = args.shift().toLowerCase()
     debug('Command Passed:', cmd, args)
 
-    if (message.content === '~!help'){
+    if (cmd === 'help'){
       message.channel.send(helpDialog)
     }
 
-    if (message.content === '~!list'){
+    if (cmd === 'list'){
       libraryList(null, (err, results) => {
         if (err) return err
         let list = ""
@@ -186,7 +194,6 @@ module.exports = (token) => {
         let title = _.get(results, 'title', 'Download')
 
         let filesToProcess = _.map([filesArray], (f) => {
-          console.log('testing f:', f)
           return {
             id: f.id,
             dirPath: path.dirname(f.file),

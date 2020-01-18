@@ -104,4 +104,4 @@ dist
 .tern-port
 
 # Ignore plex db
-com.plexapp.plugins.library.db
+com.plexapp.plugins.library.db*

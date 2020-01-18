@@ -9,12 +9,8 @@ const express      = require('express')
 const helmet       = require("helmet")
 const morgan       = require('morgan')
 
-// discord
-if (!config.discord_token){
-  console.error('Missing discord bot token in config.js file')
-  process.exit(1)
-}
-const bot = discord(config.discord_token)
+// services
+const bot          = discord(config.discord_token)
 
 if (!process.env.external_hostname){
   console.error('You will want to specify you external hostname/domain name in config.js')

@@ -8,7 +8,8 @@
 
 ## Environmentals:
 
-- `discord_token=""`
+- `discord_token="" # your discord bot token`
+- `discord_cmdPrefix="/plexcord" # defaults to ~!`
 - `auth_password="password"`
 - `plexLibrary="./com.plexapp.plugins.library.db"`
 - `external_hostname="somehostname.com"`
