@@ -2,6 +2,7 @@ const discord      = require('discord.js')
 const path         = require('path')
 const _            = require('lodash')
 const config       = require('./config')
+const debug        = require('debug')('plexCord')
 
 // files
 const libraryList     = require('../lib/queries').libraryList

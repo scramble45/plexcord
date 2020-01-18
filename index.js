@@ -1,4 +1,4 @@
-const _            = require('lodash')
+
 const apiAuth      = require("./middleware/auth")
 const bodyParser   = require('body-parser')
 const config       = require('./config')
@@ -8,17 +8,13 @@ const discord      = require('./services/discord')
 const express      = require('express')
 const helmet       = require("helmet")
 const morgan       = require('morgan')
-const path         = require('path')
-
-// files
-const libraryList     = require('./lib/queries').libraryList
-const libraryFileInfo = require('./lib/queries').libraryFileInfo
 
 // discord
-if (!process.env.discord_token){
+if (!config.discord_token){
   console.error('Missing discord bot token in config.js file')
   process.exit(1)
 }
+const bot = discord(config.discord_token)
 
 if (!process.env.external_hostname){
   console.error('You will want to specify you external hostname/domain name in config.js')
