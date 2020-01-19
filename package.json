@@ -6,7 +6,9 @@
   "scripts": {
     "start": "node index.js",
     "dev": "node-dev --no-deps --respawn index.js",
-    "test": "./node_modules/mocha/bin/mocha -u bdd -R spec --recursive --colors --timeout 30000"
+    "test": "npm run lint & npm run mocha",
+    "mocha": "./node_modules/mocha/bin/mocha -u bdd -R spec --recursive --colors --timeout 30000",
+    "lint": "./node_modules/.bin/eslint .eslintrc.js"
   },
   "repository": {
     "type": "git",
