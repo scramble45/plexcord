@@ -1,0 +1,5 @@
+-u bdd
+-R spec
+--recursive
+--colors
+--timeout 30000

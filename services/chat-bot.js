@@ -1,7 +1,8 @@
 const config = require('../config')
-const path = require('path')
-const _ = require('lodash')
-const debug        = require('debug')('plexCord:chat-bot')
+const path   = require('path')
+const _      = require('lodash')
+const debug   = require('debug')('plexCord:chat-bot')
+
 // files
 const libraryList     = require('../lib/queries').libraryList
 const libraryFileInfo = require('../lib/queries').libraryFileInfo
@@ -126,7 +127,6 @@ function description(id, cb) {
     let title = _.get(results, 'title', 'Download')
 
     let filesToProcess = _.map([filesArray], (f) => {
-      console.log('testing f:', f)
       return {
         id: f.id,
         dirPath: path.dirname(f.file),
@@ -137,7 +137,6 @@ function description(id, cb) {
     })
 
     let mappedFiles = _.map(filesToProcess, (file) => {
-      debug('FILE TEST:', JSON.stringify(file, null, 2))
       debug('fileName requested:', file.dirPath, file.fileName)
 
       let fileName = _.get(file, 'fileName')
