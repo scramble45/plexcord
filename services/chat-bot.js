@@ -11,10 +11,10 @@ function help(prefix) {
   var helpDialog = 'Help Commands\n'
   helpDialog += '```\nPlexCord:\n'
   helpDialog += `   \nAll file transactions are logged...\n`
-  helpDialog += `   ${prefix}list                List all files by id\n`
-  helpDialog += `   ${prefix}search name here    Search by title name\n`
-  helpDialog += `   ${prefix}description 00000   Description of file by id\n`
-  helpDialog += `   ${prefix}request 00000       Request a file by id\n\n`
+  helpDialog += `   ${prefix} list                List all files by id\n`
+  helpDialog += `   ${prefix} search name here    Search by title name\n`
+  helpDialog += `   ${prefix} description 00000   Description of file by id\n`
+  helpDialog += `   ${prefix} request 00000       Request a file by id\n\n`
   helpDialog += '```'
 
   return helpDialog
