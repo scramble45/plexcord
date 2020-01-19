@@ -2,6 +2,12 @@
   <img src="https://i.postimg.cc/76Ds5qGG/plexcord-logo-sm.png" alt="PlexCord"/>
 </p>
 
+<p align="center">
+  <a href="https://circleci.com/gh/scramble45/plexcord">
+    <img src="https://circleci.com/gh/scramble45/plexcord.svg?style=svg&circle-token=bed9247683011820bcada7f98e26996aff25d0b5" alt="CircleCI"/>
+  </a>
+</p>
+
 <p align="center">🍿 a multi-chat-client bot that connects to a plex database and serves up raw media 🍿</p>
 
 # Configuration
