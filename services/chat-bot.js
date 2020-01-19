@@ -7,13 +7,18 @@ const libraryList     = require('../lib/queries').libraryList
 const libraryFileInfo = require('../lib/queries').libraryFileInfo
 
 // cmds
-var helpDialog = 'Help Commands\n'
+function help(prefix) {
+  var helpDialog = 'Help Commands\n'
   helpDialog += '```\nPlexCord:\n'
   helpDialog += `   \nAll file transactions are logged...\n`
-  helpDialog += '   ~!list                List all files by id\n'
-  helpDialog += '   ~!search name here    Search by title name\n'
-  helpDialog += '   ~!description 00000   Description of file by id\n'
-  helpDialog += '   ~!request 00000       Request a file by id\n\n```'
+  helpDialog += `   ${prefix}list                List all files by id\n`
+  helpDialog += `   ${prefix}search name here    Search by title name\n`
+  helpDialog += `   ${prefix}description 00000   Description of file by id\n`
+  helpDialog += `   ${prefix}request 00000       Request a file by id\n\n`
+  helpDialog += '```'
+
+  return helpDialog
+}
 
 function search(term, cb) {
   libraryList(null, (err, results) => {
@@ -173,7 +178,7 @@ function description(id, cb) {
 }
 
 module.exports = {
-  helpDialog,
+  help,
   libraryList,
   search,
   fileInfo,

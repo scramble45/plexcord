@@ -1,4 +1,5 @@
 const discord      = require('discord.js')
+const config       = require('../config')
 const _            = require('lodash')
 const debug        = require('debug')('plexCord')
 
@@ -43,7 +44,7 @@ module.exports = (token) => {
     debug('Command Passed:', cmd, args)
 
     if (cmd === 'help'){
-      message.channel.send(chatBot.helpDialog)
+      message.channel.send(chatBot.help(cmdPrefix))
     }
 
     if (cmd === 'list'){
