@@ -1,11 +1,9 @@
-const discord      = require('discord.js')
-const _            = require('lodash')
-const config       = require('../config')
-const debug        = require('debug')('plexCord')
-
+const _       = require('lodash')
 const chatBot = require('./chat-bot')
+const config  = require('../config')
+const debug   = require('debug')('plexCord')
+const discord = require('discord.js')
 
-// discord
 if (!config.discord_token){
   console.error('Missing discord bot token in config.js file')
   process.exit(1)
@@ -67,7 +65,6 @@ module.exports = (token) => {
       if (!args) message.channel.send('You must provide a search term.')
       if (!_.isArray(args)) args = [args]
       let term = args
-
 
       chatBot.search(term, (err, results) => {
         if (err) return err

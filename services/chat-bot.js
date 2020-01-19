@@ -1,7 +1,8 @@
+const _      = require('lodash')
 const config = require('../config')
-const path = require('path')
-const _ = require('lodash')
-const debug        = require('debug')('plexCord:chat-bot')
+const debug  = require('debug')('plexCord:chat-bot')
+const path   = require('path')
+
 // files
 const libraryList     = require('../lib/queries').libraryList
 const libraryFileInfo = require('../lib/queries').libraryFileInfo
@@ -11,10 +12,10 @@ function help(prefix) {
   var helpDialog = 'Help Commands\n'
   helpDialog += '```\nPlexCord:\n'
   helpDialog += `   \nAll file transactions are logged...\n`
-  helpDialog += `   ${prefix}list                List all files by id\n`
-  helpDialog += `   ${prefix}search name here    Search by title name\n`
-  helpDialog += `   ${prefix}description 00000   Description of file by id\n`
-  helpDialog += `   ${prefix}request 00000       Request a file by id\n\n`
+  helpDialog += `   ${prefix} list                List all files by id\n`
+  helpDialog += `   ${prefix} search name here    Search by title name\n`
+  helpDialog += `   ${prefix} description 00000   Description of file by id\n`
+  helpDialog += `   ${prefix} request 00000       Request a file by id\n\n`
   helpDialog += '```'
 
   return helpDialog
@@ -31,7 +32,6 @@ function search(term, cb) {
     _.forEach(term, (t) => {
       let searchTerm = new RegExp(t, 'i')
       debug('running search for:', searchTerm)
-
 
       for (var i=0; i < results.length; i++) {
         if (results[i].title.match(searchTerm)) {
@@ -126,7 +126,6 @@ function description(id, cb) {
     let title = _.get(results, 'title', 'Download')
 
     let filesToProcess = _.map([filesArray], (f) => {
-      console.log('testing f:', f)
       return {
         id: f.id,
         dirPath: path.dirname(f.file),
@@ -137,7 +136,6 @@ function description(id, cb) {
     })
 
     let mappedFiles = _.map(filesToProcess, (file) => {
-      debug('FILE TEST:', JSON.stringify(file, null, 2))
       debug('fileName requested:', file.dirPath, file.fileName)
 
       let fileName = _.get(file, 'fileName')
