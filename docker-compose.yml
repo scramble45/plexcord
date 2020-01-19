@@ -1,0 +1,24 @@
+version: '3'
+services:
+  plexcord:
+    container_name: plexcord
+    build: .
+    restart: always
+    ports:
+      - "2599:2599"
+    volumes:
+      - /path/to/plex:/plex
+      - /path/to/media/collection:/data
+    environment:
+      - discord_token=
+      - external_hostname=
+      - plexLibrary=com.plexapp.plugins.library.db
+      - auth_password=admin
+      - discord_cmdPrefix=/plexcord
+    networks:
+      - local
+
+networks:
+  local:
+    external:
+      name: local
