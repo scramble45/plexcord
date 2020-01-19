@@ -1,3 +1,4 @@
+/* eslint-disable camelcase */
 module.exports = {
   discord_token: process.env.discord_token,
   discord_cmdPrefix: process.env.discord_cmdPrefix,

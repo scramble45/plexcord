@@ -1,12 +1,12 @@
 
-const apiAuth      = require("./middleware/auth")
+const apiAuth      = require('./middleware/auth')
 const bodyParser   = require('body-parser')
 const config       = require('./config')
 const cookieParser = require('cookie-parser')
 const debug        = require('debug')('plexCord')
 const discord      = require('./services/discord')
 const express      = require('express')
-const helmet       = require("helmet")
+const helmet       = require('helmet')
 const morgan       = require('morgan')
 
 // services
@@ -39,7 +39,7 @@ app.use((req, res, next) => {
 
 // helmet
 app.use(helmet.xssFilter())
-app.use(helmet.frameguard("deny"))
+app.use(helmet.frameguard('deny'))
 app.use(helmet.hidePoweredBy())
 app.use(helmet.ieNoOpen())
 app.use(helmet.noSniff())
@@ -49,7 +49,7 @@ app.use(helmet.hsts({
 }))
 
 // morgan
-app.enable("trust proxy")
+app.enable('trust proxy')
 app.use(morgan('short'))
 
 // body parser
@@ -104,8 +104,8 @@ app.use(function(err, req, res, next) {
 })
 
 process.on('SIGINT', function onSigterm () {
-  if(server) {
-    console.log("shutting express down")
+  if (server) {
+    console.log('shutting express down')
     return server.close(() => {
       console.log('Closed out remaining connections')
       process.exit(0)
