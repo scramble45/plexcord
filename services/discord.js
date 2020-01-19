@@ -1,6 +1,6 @@
 const discord      = require('discord.js')
-const config       = require('../config')
 const _            = require('lodash')
+const config       = require('../config')
 const debug        = require('debug')('plexCord')
 
 const chatBot = require('./chat-bot')
