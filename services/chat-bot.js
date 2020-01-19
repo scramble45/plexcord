@@ -77,34 +77,35 @@ function fileInfo(id, cb) {
       }
 
       let encodedFilename = encodeURI(path.normalize(fileName))
-      let curlCmd = "`" + `curl -o "${fileName}" --url http://${config.external_hostname}:${config.web_port}/files/${fileId}/${encodedFilename} -H "Authorization: Basic b64"` + "`"
+      let curlCmd = '`' + `curl -o "${fileName}" --url http://${config.external_hostname}:${config.web_port}/files/${fileId}/${encodedFilename} -H "Authorization: Basic b64"` + '`'
 
       return {
         embed: {
           title: title,
           color: 15105570,
-          fields: [{
-              name: "Year:",
+          fields: [
+            {
+              name: 'Year:',
               value: _.get(results, 'year', 'N/A') || 'N/A'
             },
             {
-              name: "Summary:",
+              name: 'Summary:',
               value: _.get(results, 'summary', 'N/A') || 'N/A'
             },
             {
-              name: "Size:",
+              name: 'Size:',
               value: _.get(f, 'size', 'N/A') || 'N/A'
             },
             {
-              name: "Hash:",
-              value: "`" + (_.get(f, 'hash', 'N/A') || 'N/A') + "`"
+              name: 'Hash:',
+              value: '`' + (_.get(f, 'hash', 'N/A') || 'N/A') + '`'
             },
             {
-              name: "Link:",
+              name: 'Link:',
               value: `[Download](http://${config.external_hostname}:${config.web_port}/files/${fileId}/${fileName})`
             },
             {
-              name: "Curl:",
+              name: 'Curl:',
               value: curlCmd
             }
           ],
@@ -146,29 +147,30 @@ function description(id, cb) {
       }
 
       return {
-          "embed":{
-            title: title,
-            color: 15105570,
-            fields: [{
-                name: "Year:",
-                value: _.get(results, 'year', 'N/A') || 'N/A'
-              },
-              {
-                name: "Summary:",
-                value: _.get(results, 'summary', 'N/A') || 'N/A'
-              },
-              {
-                name: "Size:",
-                value: _.get(file, 'size', 'N/A') || 'N/A'
-              },
-              {
-                name: "Hash:",
-                value: "`" + (_.get(file, 'hash', 'N/A') || 'N/A') + "`"
-              }
-            ],
-            timestamp: new Date()
-          }
+        embed:{
+          title: title,
+          color: 15105570,
+          fields: [
+            {
+              name: 'Year:',
+              value: _.get(results, 'year', 'N/A') || 'N/A'
+            },
+            {
+              name: 'Summary:',
+              value: _.get(results, 'summary', 'N/A') || 'N/A'
+            },
+            {
+              name: 'Size:',
+              value: _.get(file, 'size', 'N/A') || 'N/A'
+            },
+            {
+              name: 'Hash:',
+              value: '`' + (_.get(file, 'hash', 'N/A') || 'N/A') + '`'
+            }
+          ],
+          timestamp: new Date()
         }
+      }
     })
     debug({mappedFiles})
     return cb(null, mappedFiles)

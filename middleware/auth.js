@@ -13,7 +13,7 @@ function apiAuth(req, res, next) {
   let credentials = basicAuth(req)
 
   if (!credentials || !basicAuthCheck(credentials.name, credentials.pass)) {
-    res.set({"WWW-Authenticate": "Basic realm=\"simple-admin\""})
+    res.set({'WWW-Authenticate': 'Basic realm="simple-admin"'})
     return res.status(401).send()
   }
 
