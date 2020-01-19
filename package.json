@@ -36,6 +36,7 @@
   },
   "devDependencies": {
     "debug": "^4.1.1",
+    "mocha": "^7.0.0",
     "node-dev": "^4.0.0"
   }
 }
