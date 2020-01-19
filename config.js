@@ -6,4 +6,5 @@ module.exports = {
   external_hostname: process.env.external_hostname,
   plex_library_id: 1,
   web_port: 2599,
+  test: process.env.plexCord_test || false
 }

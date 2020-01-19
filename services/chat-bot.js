@@ -1,7 +1,7 @@
-const config = require('../config')
-const path   = require('path')
 const _      = require('lodash')
+const config = require('../config')
 const debug  = require('debug')('plexCord:chat-bot')
+const path   = require('path')
 
 // files
 const libraryList     = require('../lib/queries').libraryList
@@ -32,7 +32,6 @@ function search(term, cb) {
     _.forEach(term, (t) => {
       let searchTerm = new RegExp(t, 'i')
       debug('running search for:', searchTerm)
-
 
       for (var i=0; i < results.length; i++) {
         if (results[i].title.match(searchTerm)) {

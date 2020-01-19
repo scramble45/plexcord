@@ -6,7 +6,7 @@
   "scripts": {
     "start": "node index.js",
     "dev": "node-dev --no-deps --respawn index.js",
-    "test": "./node_modules/mocha/bin/mocha"
+    "test": "./node_modules/mocha/bin/mocha -u bdd -R spec --recursive --colors --timeout 30000"
   },
   "repository": {
     "type": "git",
