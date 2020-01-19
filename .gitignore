@@ -105,3 +105,4 @@ dist
 
 # Ignore plex db
 com.plexapp.plugins.library.db*
+test/sample.db-*

@@ -12,7 +12,7 @@ if (!config.discord_token){
 const cmdPrefix = config.discord_cmdPrefix || '~!'
 
 const formatList = (results) => {
-  let list = ""
+  let list = ''
   _.forEach(results, (i) => {
     list += `ID: ${i.id} - ${i.title} (${i.year})\n`
   })
@@ -34,7 +34,7 @@ module.exports = (token) => {
     if (message.author.bot) return
 
     // Check if the message starts with the prefix trigger
-    if (!message.content.startsWith(cmdPrefix)) return;
+    if (!message.content.startsWith(cmdPrefix)) return
 
     // parse arguments
     let args = message.content.slice(cmdPrefix.length).trim().split(/ +/g)
@@ -99,7 +99,7 @@ module.exports = (token) => {
       chatBot.description(id, (err, files) => {
         if (err) return err
         if (!files) return message.channel.send(`Nothing found by that id or filename did not return: ${id}`)
-        debug("discord files %O", {files})
+        debug('discord files %O', {files})
 
         _.forEach(files, (file) => message.author.send(file))
       })
