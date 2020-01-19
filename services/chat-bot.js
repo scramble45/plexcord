@@ -1,7 +1,7 @@
 const config = require('../config')
 const path   = require('path')
 const _      = require('lodash')
-const debug   = require('debug')('plexCord:chat-bot')
+const debug  = require('debug')('plexCord:chat-bot')
 
 // files
 const libraryList     = require('../lib/queries').libraryList
