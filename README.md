@@ -4,8 +4,6 @@
 
 <p align="center">🍿 a multi-chat-client bot that connects to a plex database and serves up raw media 🍿</p>
 
-[![Build Status](https://travis-ci.com/scramble45/plexcord.svg?token=vsiskvMrFp5uCYBJUqqt&branch=master)](https://travis-ci.com/scramble45/plexcord)
-
 # Configuration
 
 ## Environmentals:
