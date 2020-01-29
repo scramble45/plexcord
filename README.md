@@ -15,11 +15,22 @@
 
 ## Environmentals:
 
-- `discord_token="" # your discord bot token`
-- `discord_cmdPrefix="/plexcord" # defaults to ~!`
-- `auth_password="password"`
-- `plexLibrary="./com.plexapp.plugins.library.db"`
-- `external_hostname="somehostname.com"`
+- `discord_token= # your discord bot token`
+- `discord_cmdPrefix=/plexcord # defaults to ~!`
+- `auth_password=password`
+- `plexdb=./com.plexapp.plugins.library.db`
+- `external_hostname=somehostname.com`
+
+## Library configuration
+
+These are your plex library numbers typically 1 or 2 or inversed.
+
+```javascript
+libraries: {
+  'movies': 1,
+  'tv': 2
+}
+```
 
 ## Startup:
 

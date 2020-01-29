@@ -6,15 +6,17 @@ const path   = require('path')
 // files
 const libraryList     = require('../lib/queries').libraryList
 const libraryFileInfo = require('../lib/queries').libraryFileInfo
+const tvSeries        = require('../lib/queries').tvSeries
 
 // cmds
 function help(prefix) {
   var helpDialog = 'Help Commands\n'
   helpDialog += '```\nPlexCord:\n'
   helpDialog += `   \nAll file transactions are logged...\n`
-  helpDialog += `   ${prefix} list                List all files by id\n`
-  helpDialog += `   ${prefix} search name here    Search by title name\n`
-  helpDialog += `   ${prefix} description 00000   Description of file by id\n`
+  helpDialog += `   ${prefix} ls                  List all id's\n`
+  helpDialog += `   ${prefix} search name here    Search by movie title name\n`
+  helpDialog += `   ${prefix} description 00000   Description of movie file by id\n`
+  helpDialog += `   ${prefix} tv 00000            Get Episode list for by id *TV BETA*\n`
   helpDialog += `   ${prefix} request 00000       Request a file by id\n\n`
   helpDialog += '```'
 
@@ -25,6 +27,7 @@ function search(term, cb) {
   libraryList(null, (err, results) => {
     if (err) return err
 
+    // TODO make this handle both movies and tv shows
     debug('search term:', term)
 
     let matches = []
@@ -33,9 +36,9 @@ function search(term, cb) {
       let searchTerm = new RegExp(t, 'i')
       debug('running search for:', searchTerm)
 
-      for (var i=0; i < results.length; i++) {
-        if (results[i].title.match(searchTerm)) {
-          matches.push(results[i])
+      for (var i=0; i < results.movies.length; i++) {
+        if (results.movies[i].title.match(searchTerm)) {
+          matches.push(results.movies[i])
         }
       }
     })
@@ -57,6 +60,7 @@ function fileInfo(id, cb) {
     let title = _.get(results, 'title', 'Download')
 
     let filesToProcess = _.map([filesArray], (f) => {
+      if (_.isArray(f)) return [] // deals with TV show ids
       return {
         id: f.id,
         dirPath: path.dirname(f.file),
@@ -127,6 +131,7 @@ function description(id, cb) {
     let title = _.get(results, 'title', 'Download')
 
     let filesToProcess = _.map([filesArray], (f) => {
+      if (_.isArray(f)) return [] // deals with TV show ids
       return {
         id: f.id,
         dirPath: path.dirname(f.file),
@@ -177,10 +182,19 @@ function description(id, cb) {
   })
 }
 
+function tv(id, cb) {
+  tvSeries(id, (err, results) => {
+    if (err) return cb(err)
+    debug('tv series:', results)
+    return cb(null, results)
+  })
+}
+
 module.exports = {
   help,
   libraryList,
   search,
   fileInfo,
-  description
+  description,
+  tv
 }

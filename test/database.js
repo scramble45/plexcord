@@ -6,7 +6,7 @@ describe('Chat BOT library list', () => {
   before((done) => {
     chatBot.libraryList(null, (err, results) => {
       if (err) return err
-      rows = results
+      rows = results.movies
       done()
     })
   })
@@ -19,7 +19,7 @@ describe('Chat BOT file info', () => {
   before((done) => {
     chatBot.fileInfo(5, (err, results) => {
       if (err) return err
-      rows = results
+      rows = results.movies
       done()
     })
   })
@@ -34,7 +34,7 @@ describe('Chat BOT id description', () => {
   before((done) => {
     chatBot.description(5, (err, results) => {
       if (err) return err
-      rows = results
+      rows = results.movies
       done()
     })
   })

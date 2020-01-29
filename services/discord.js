@@ -11,10 +11,22 @@ if (!config.discord_token){
 
 const cmdPrefix = config.discord_cmdPrefix || '~!'
 
-const formatList = (results) => {
+const formatList = (type, results) => {
   let list = ''
+  if (type) {
+    list = `${type}:\n--------------------\n`
+  }
   _.forEach(results, (i) => {
     list += `ID: ${i.id} - ${i.title} (${i.year})\n`
+  })
+  debug(list)
+  return list
+}
+
+const formatTVList = (results) => {
+  let list = ''
+  _.forEach(results, (i) => {
+    list += `ID: ${i.id} ${i.series} - (${i.seasonEpisode}) - ${i.title}\n`
   })
   debug(list)
   return list
@@ -45,18 +57,20 @@ module.exports = (token) => {
       message.channel.send(chatBot.help(cmdPrefix))
     }
 
-    if (cmd === 'list'){
+    if (cmd === 'list' | cmd === 'ls'){
       chatBot.libraryList(null, (err, results) => {
+        console.log('testing our results:', results)
         if (err) return err
 
-        if (!results.length > 0) {
-          message.channel.send('No results found.')
-          return
-        }
+        let moviesArray = _.get(results, 'movies', [])
+        let tvArray = _.get(results, 'tv', [])
 
-        let list = formatList(results)
+        let moviesList = formatList('Movies', moviesArray)
+        let tvList = formatList('TV Shows', tvArray)
 
-        message.channel.send(list, { code: 'text', split: true })
+        let libraryList = `${moviesList}\n${tvList}`
+        if (!libraryList) return message.channel.send('No results found.')
+        message.channel.send(libraryList, { code: 'text', split: true })
       })
 
     }
@@ -69,12 +83,13 @@ module.exports = (token) => {
       chatBot.search(term, (err, results) => {
         if (err) return err
 
+        // todo fix this for both tv and movies
         if (!results.length > 0) {
           message.channel.send('No search results found.')
           return
         }
 
-        let list = formatList(results)
+        let list = formatList(null, results)
         message.channel.send(list, { code: 'text', split: true })
       })
 
@@ -104,6 +119,20 @@ module.exports = (token) => {
         _.forEach(files, (file) => message.author.send(file))
       })
     }
+
+    if (cmd === 'tv') {
+      let [id] = args
+      if (!id) message.channel.send('You must provide an id.')
+      chatBot.tv(id, (err, episodes) => {
+        if (err) return err
+        if (!episodes) return message.channel.send(`Nothing found by that id: ${id}`)
+        debug('discord tv episodes %O', {episodes})
+
+        let list = formatTVList(episodes)
+        message.channel.send(list, { code: 'text', split: true })
+      })
+    }
+
   })
 
   return bot
