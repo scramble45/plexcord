@@ -19,7 +19,7 @@ describe('Chat BOT file info', () => {
   before((done) => {
     chatBot.fileInfo(5, (err, results) => {
       if (err) return err
-      rows = results.movies
+      rows = results
       done()
     })
   })
@@ -34,7 +34,7 @@ describe('Chat BOT id description', () => {
   before((done) => {
     chatBot.description(5, (err, results) => {
       if (err) return err
-      rows = results.movies
+      rows = results
       done()
     })
   })
